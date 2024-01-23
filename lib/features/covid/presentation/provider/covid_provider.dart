@@ -19,10 +19,11 @@ class CovidProvider {
       if (e.response != null) {
         debugPrint(
             'Error in getting data ${e.response!.statusCode} : ${e.response!.statusMessage}');
+        throw ('Error in getting data ${e.response!.statusCode} : ${e.response!.statusMessage}');
       } else {
         debugPrint('Error in getting data: ${e.message}');
+        throw ('Error in getting data: ${e.message}');
       }
-      throw ('${e.message}');
     }
   }
 }
@@ -43,10 +44,37 @@ class CountryStatProvider {
       if (e.response != null) {
         debugPrint(
             'Error in getting data ${e.response!.statusCode} : ${e.response!.statusMessage}');
+        throw ('Error in getting data ${e.response!.statusCode} : ${e.response!.statusMessage}');
       } else {
         debugPrint('Error in getting data: ${e.message}');
+        throw ('Error in getting data: ${e.message}');
       }
-      throw ('${e.message}');
+    }
+  }
+}
+
+// search  covid stat by country
+
+final searchCountryStatProvider = FutureProvider.family(
+    (ref, String searchText) =>
+        SearchCountryStatPorvider.getSearchCountryStat(searchText: searchText));
+
+class SearchCountryStatPorvider {
+  static Future<CountryStat> getSearchCountryStat(
+      {required String searchText}) async {
+    try {
+      final res = await API().get('${EndPoint.getAllCountries}/$searchText');
+      final data = CountryStat.fromJson(res.data);
+      return data;
+    } on DioException catch (e) {
+      if (e.response != null) {
+        debugPrint(
+            'Error in getting data ${e.response!.statusCode} : ${e.response!.statusMessage}');
+        throw ('Error in getting data ${e.response!.statusCode} : ${e.response!.statusMessage}');
+      } else {
+        debugPrint('Error in getting data: ${e.message}');
+        throw ('Error in getting data: ${e.message}');
+      }
     }
   }
 }

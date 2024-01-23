@@ -14,13 +14,19 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:syncfusion_flutter_maps/maps.dart';
 
-class HomePage extends ConsumerWidget {
+class HomePage extends ConsumerStatefulWidget {
   HomePage({super.key});
 
+  @override
+  ConsumerState<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends ConsumerState<HomePage> {
   final txtStyle = TextStyle(
       fontFamily: FontStyles.poppinMedium,
       fontSize: 18.sp,
       color: Colors.white);
+
   final titleStyle = TextStyle(
     fontFamily: FontStyles.poppinSemiBold,
     fontSize: 18.sp,
@@ -41,10 +47,11 @@ class HomePage extends ConsumerWidget {
     }
   }
 
+  TextEditingController searchTextController = TextEditingController();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
-  Widget build(BuildContext context, ref) {
+  Widget build(BuildContext context) {
     final covidStatData = ref.watch(allCovidStatProvider);
     final countryStatData = ref.watch(countryStatProvider);
     final themeData = ref.watch(themeProvider);
@@ -107,7 +114,7 @@ class HomePage extends ConsumerWidget {
                 ],
               ),
               SearchContainer(
-                onTap: () {},
+                controller: searchTextController,
               ),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.w),
@@ -242,7 +249,7 @@ class HomePage extends ConsumerWidget {
                                 return Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Text(
-                                    '${data[index].country} : ${data[index].cases} cases',
+                                    '${data[index].country} : ${data[index].cases} Cases',
                                     style: TextStyle(
                                         color: Colors.white,
                                         fontFamily: FontStyles.poppins,
